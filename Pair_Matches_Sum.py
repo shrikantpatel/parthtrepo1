@@ -23,7 +23,7 @@ class Solution:
 if __name__ == "__main__" :
     Program = Solution()
 Program.pairMatchingSum([1, 2, 3, 4, 5], 9) == True 
-Program.pairMatchingSum([1, 2, 3, 4, 7,] 10) == False
+Program.pairMatchingSum([1, 2, 3, 4, 7,], 10) == False
 Program.pairMatchingSum([2, 2, 3, 4, 5], 4) == True
 Program.pairMatchingSum([1, 3, 3, 4, 5], 9) == True
 Program.pairMatchingSum([5, 2, 3, 4, 1], 9) == True
