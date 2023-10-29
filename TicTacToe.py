@@ -7,13 +7,16 @@ screen = pygame.display.set_mode((screen_width, screen_height))
 #title of the window
 pygame.display.set_caption('TicTacToe')
 
+
 #we will define all the variable here
 line_width = 6
 markers = []
 clicked = False
 pos = []
 player = 1
+winner = 0
 game_over = False
+game_draw = False
 
 
 #define coulours
@@ -23,6 +26,9 @@ red = (255, 0, 0)
 #define font
 font = pygame.font.SysFont(None, 40)
 blue = (0, 0, 255)
+
+#create the play again rectangle 
+again_rect = Rect(screen_width // 2 - 80, screen_height // 2, 160, 50)
 
 #draw the grid
 def draw_grid():
@@ -58,19 +64,24 @@ def draw_markers():
          y_pos += 1
       #one were moved on from the y I want to move on to the x postion
       x_pos += 1
-      
+ 
+#We will chech the markers and look for any winning combinations      
 def check_winner():
    
    global winner
    global game_over
    
    y_pos = 0
+   #Now we look through the list
    for x in markers:
       #check columns
+      #if player one has any markers in those columns they would each eqaul to one 
+      #by using the sum function we can see if it is 3 for player one or -3 for player two
       if sum(x) == 3:
          winner = 1
          game_over = True
       if sum(x) == -3:
+         #here I have changed back to using player 1 and 2 instead of 1 and -1 because this makes it easier when we are printing the winner
          winner = 2
          game_over = True
       # check all the rows
@@ -90,6 +101,8 @@ def check_winner():
       winner = 1
       game_over = True
       
+   
+
       
 def draw_winner(winner):
    win_text = 'Player ' + str(winner) +' wins!'
@@ -97,6 +110,10 @@ def draw_winner(winner):
    pygame.draw.rect(screen, green, (screen_width // 2 - 100, screen_height // 2 - 60, 200, 50))
    screen.blit(win_img, (screen_width // 2 - 100, screen_height // 2 - 50))
    
+   again_text = 'Play Again?'
+   again_img = font.render(again_text, True, blue)
+   pygame.draw.rect(screen, green, again_rect)
+   screen.blit(again_img, (screen_width // 2 - 80, screen_height // 2 + 10))
 
 #this while loop will run the game and look for interaction from the user
 run = True
@@ -133,8 +150,24 @@ while run:
                check_winner()
    
    if game_over == True:
-      draw_winner(winner)      
-         
+      draw_winner(winner) 
+      #check mouse click to see if the player wants to play again
+      if event.type == pygame.MOUSEBUTTONDOWN and clicked == False:
+         clicked = True
+      if event.type == pygame.MOUSEBUTTONUP and clicked == True:
+         clicked = False
+         pos = pygame.mouse.get_pos()
+         if again_rect.collidepoint(pos):
+            # reset my variable to reset the program
+            markers = []
+            pos = []
+            player = 1
+            winner = 0
+            game_over = False
+            for x in range(3):
+               row = [0] * 3
+               markers.append(row)
+                     
    #will update the code if any addition are made (images, etc)   
    pygame.display.update()
    
