@@ -1,2 +1,2 @@
-To install pygame use this:
-pip install pygame
+#To install pygame use this:
+#pip install pygame
