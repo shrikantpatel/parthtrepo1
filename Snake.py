@@ -17,6 +17,9 @@ pygame.display.set_caption('Snake')
 #for this program the screen will be divided into a grid with cells
 # because we are dividing the cell_size into 10 there will be a total of 60 cells when going down or up and 60 cells when going left or right
 cell_size = 10
+#1 is up, 2 will be right, 3 is down, and 4 is left
+direction = 1 #1 is up, 2 will be right, 3 is down, and 4 is left
+update_snake = 0
 
 #create the snake
 #snake pos will hold the position of the snake
@@ -54,6 +57,41 @@ while run:
         # once the xit button is hit pygame.QUIT will set run to false and we will be out of the loop
         if event.type == pygame.QUIT:
             run = False
+        # we want to see if theere is a keypress and we will be using the arrow key
+        elif event.type == pygame.KEYDOWN:
+            # we add the "and direction != 30" to the code because we want to make sure that if the snake is going up it cannot go down and go through itself
+            if event.key == pygame.K_UP and direction != 3:
+                direction = 1
+            if event.key == pygame.K_RIGHT and direction != 4:
+                direction = 2
+            if event.key == pygame.K_DOWN and direction != 1:
+                direction = 3
+            if event.key == pygame.K_LEFT and direction != 2:
+                direction = 4
+                
+                
+                
+    # update snake starts wiht a value of 0 so  it does not meet 99 so it keeps on running until it reaches 99            
+    if update_snake > 99:
+        update_snake = 0    
+        # so for each segment of the snake we are moving it by one in the list to make it look like it is moving
+        #EX. moving segment 3 into the place of segment 2 and segment 4 into the place of segment 3
+        snake_pos = snake_pos[-1:] + snake_pos[:-1]
+        #going upward
+        if direction == 1:
+            snake_pos[0][0] = snake_pos[1][0]
+            snake_pos[0][1] = snake_pos[1][1] - cell_size
+        if direction == 3:
+            snake_pos[0][0] = snake_pos[1][0]
+            snake_pos[0][1] = snake_pos[1][1] + cell_size
+        if direction == 2:
+            snake_pos[0][1] = snake_pos[1][1]
+            snake_pos[0][0] = snake_pos[1][0] + cell_size
+        if direction == 4:
+            snake_pos[0][1] = snake_pos[1][1]
+            snake_pos[0][0] = snake_pos[1][0] - cell_size
+    
+    
     
     #draw snake
     # we want the head to be a different color to show which direction it is going in
@@ -72,6 +110,8 @@ while run:
     
     #update the screen
     pygame.display.update()
+    
+    update_snake += 1
     
 #stop pygame
 pygame.quit()
