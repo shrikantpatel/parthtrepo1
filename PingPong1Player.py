@@ -48,6 +48,15 @@ class paddle():
         if key[pygame.K_DOWN] and self.rect.bottom < screen_height:
             self.rect.move_ip(0,self.speed)  
             
+            
+    def ai(self):
+        #ai to move the cpu paddle
+        #if the middle of the paddle is higher that the ball than go down but we dont want it to go to far down
+        if self.rect.centery < pong.rect.top and self.rect.bottom < screen_height:
+            self.rect.move_ip(0, self.speed)
+        if self.rect.centery > pong.rect.bottom and self.rect.top > margin:
+            self.rect.move_ip(0, -1 * self.speed)        
+            
     def draw(self):
         pygame.draw.rect(screen, white, self.rect)
         
@@ -62,6 +71,11 @@ class ball():
             self.speed_y *= -1
         if self.rect.bottom > screen_height:
             self.speed_y *= -1
+            
+        #check collision with paddles
+        if self.rect.colliderect(player_paddle) or self.rect.colliderect(cpu_paddle):
+            self.speed_x *= -1    
+            
         #check if ball goes out of bounds
         if self.rect.left < 0:
             self.winner = 1
@@ -114,23 +128,17 @@ while run:
         if winner == 0:
             #move paddle
             player_paddle.move()
+            cpu_paddle.ai()
             #draw ball
             pong.draw()
         else:
-            live_ball == False
+            live_ball = False
             if winner == 1:
                 player_score += 1
             elif winner == -1:
                 cpu_score += 1
                 
             
-    
-    #pong draw ball
-    pong.draw()
-    
-    #move the paddle
-    player_paddle.move()
-        
     # go through the events
     for event in pygame.event.get():
         # once the xit button is hit pygame.QUIT will set run to false and we will be out of the loop
@@ -138,7 +146,7 @@ while run:
             run = False
         if event.type == pygame.MOUSEBUTTONDOWN and live_ball == False:
             live_ball = True
-            pong.reset(screen_width - 60, screen_height // 2 +50)
+            pong.reset(screen_width - 60, screen_height // 2 + 50)
     pygame.display.update()
             
 pygame.quit()

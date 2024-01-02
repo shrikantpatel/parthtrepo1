@@ -96,7 +96,7 @@ def draw_game_over():
 
 #create the loop with exit event handler (Same as tictactoe)
 # will keep on running game until a false condition(event handler) is given
-run = True
+run = True                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              
 while run:
     
     draw_screen()
